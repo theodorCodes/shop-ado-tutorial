@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,7 @@ SECRET_KEY = 'django-insecure-!tso84risnw0d(h*v)ep#4yq$^0@xiat&@5f5pud@$o7v%qds)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost','192.168.1.3']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.3']
 
 
 # Application definition
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # required by allauth
+    'allauth',  # required by allauth
+    'allauth.account',  # required by allauth
+    'allauth.socialaccount',  # required by allauth
 ]
 
 MIDDLEWARE = [
@@ -59,13 +64,38 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request',  # required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
+
+# AUTHENTICATION_BACKENDS by and required by allauth
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# SITE_ID by and required by allauth
+SITE_ID = 1
+
+# EMAIL_BACKEND by and required by allauth
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# EMAIL settings by Code Institute tutorial
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
