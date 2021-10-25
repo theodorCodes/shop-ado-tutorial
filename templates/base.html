@@ -12,6 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% endblock %}
 
+  <!-- custom meta -->
   {% block extra_meta %}
   {% endblock %}
 
@@ -21,10 +22,11 @@
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   {% endblock %}
 
+  <!-- custom css -->
   {% block extra_css %}
   {% endblock %}
 
-  {% block corjs %}
+  {% block corejs %}
   <!-- jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
@@ -35,6 +37,7 @@
     crossorigin="anonymous"></script>
   {% endblock %}
 
+  <!-- custom js -->
   {% block extra_js %}
   {% endblock %}
 
@@ -48,12 +51,15 @@
   <div class="message-container"></div>
   {% endif %}
 
+  <!-- custom header -->
   {% block page_header %}
   {% endblock %}
 
+  <!-- custom content -->
   {% block content %}
   {% endblock %}
 
+  <!-- custom js -->
   {% block postloadjs %}
   {% endblock %}
 
