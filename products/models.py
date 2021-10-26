@@ -7,6 +7,11 @@ from django.db import models
 # like clothing, kitchen and dining, or deals.
 # And that'll inherit from models.Model
 class Category(models.Model):
+
+    # Fixing names in admin showing Categorys instead of Categories
+    class Meta:
+        verbose_name_plural = 'Categories'
+
     # This model is quite simple,
     # all it contains is a name which is a character field that represents the programmatic name
     # And we'll give that a max length of 254
