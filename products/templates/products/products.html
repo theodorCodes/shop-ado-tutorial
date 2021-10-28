@@ -1,0 +1,36 @@
+<!-- The products template will still extend base.html -->
+{% extends "base.html" %}
+<!-- And will still require static files -->
+{% load static %}
+
+<!-- 
+as well as the page header to push the top of it down 
+to the bottom of the main nav bar and site header.
+-->
+{% block page_header %}
+<div class="container header-container">
+  <div class="row">
+    <div class="col"></div>
+  </div>
+</div>
+{% endblock %}
+
+<!-- 
+But for now, let's just delete all the content.
+And replace it with a plain old container row and column.
+-->
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <!--
+      Inside this column is where the magic will happen.
+      If you remember the context from our all products view.
+      You'll remember that we have a template variable available to us called products.
+      Let's simply render that out and make sure that we can see the products.
+      -->
+      {{ products }}
+    </div>
+  </div>
+</div>
+{% endblock %}

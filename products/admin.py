@@ -11,7 +11,7 @@ from .models import Product, Category
 
 class ProductAdmin(admin.ModelAdmin):
     # For products let's add the list display attribute.
-    # Which is a tuple that will tell the admin which fields to display.
+    # Which is a tuple that will tell the admin which (existing) fields to display.
     # I'll add SKU, name, category, price, rating, and image
     list_display = (
         'sku',

@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),  # required by allauth
     path('', include('home.urls')),  # added for home template
+    path('products/', include('products.urls')),  # added for products template
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
