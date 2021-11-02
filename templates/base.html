@@ -47,19 +47,30 @@
 </head>
 
 <body>
-  <!-- Navigation -->
+  <!-- Main content -->
   <header class="container-fluid fixed-top">
     <!-- Header top -->
     <div id="topnav" class="row bg-white pt-lg-2 d-none d-lg-flex">
+
       <!-- Logo -->
       <div class="col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left">
         <a href="{% url 'home' %}" class="nav-link main-logo-link">
           <h2 class="logo-font text-black my-0"><strong>Boutique</strong> Ado</h2>
         </a>
       </div>
+
       <!-- Search form -->
       <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
-        <form method="GET" action="">
+        <!-- 
+        Let's begin with search queries.
+        You'll recall that we have a search form in the main site header
+        which uses request.get to submit a search query.
+        We didn't give it an action url when we created it.
+        Because we didn't have a url to handle it at that time.
+        But now we have the products url. So let's change the action url to products which
+        will submit this form to the all_products view.
+        -->
+        <form method="GET" action="{% url 'products' %}">
           <div class="input-group w-100">
             <input class="form-control border border-black rounded-0" type="text" name="q"
               placeholder="Search our site">
@@ -73,6 +84,7 @@
           </div>
         </form>
       </div>
+
       <!-- Account -->
       <div class="col-12 col-lg-4 my-auto py-1 py-lg-0">
         <ul class="list-inline list-unstyled text-center text-lg-right my-0">
@@ -121,15 +133,19 @@
           </li>
         </ul>
       </div>
+
     </div>
+
     <!-- Header main navigation -->
     <div class="row bg-white">
       <!-- Bootstrap collapsible navigation -->
       <nav class="navbar navbar-expand-lg navbar-light w-100">
+        <!-- toggle navigation bar -->
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav"
           aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+        <!-- Jinja links to main and mobile navigation -->
         {% include 'includes/mobile-top-header.html' %}
         {% include 'includes/main-nav.html' %}
       </nav>

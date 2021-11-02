@@ -1,25 +1,49 @@
-from django.shortcuts import render
-# For now let's import the product model.
-from .models import Product
-
-
-# And just change the name from index to all_products.
+from django.shortcuts import render, redirect, reverse, get_object_or_404
+from django.contrib import messages
+from django.db.models import Q
+from .models import Product, Category
 
 
 def all_products(request):
-    # This view is going to show all products
-    # but eventually will also handle sorting in searches too
-    # so I'll add that to the docstring.
     """ A view to show all products, including sorting and search queries """
 
-    # And just return all products from the database using product.objects.all
     products = Product.objects.all()
+    query = None
+    categories = None
 
-    # I'll add that to the context so our products will be available in the template.
+    if request.GET:
+        if 'category' in request.GET:
+            categories = request.GET['category'].split(',')
+            products = products.filter(category__name__in=categories)
+            categories = Category.objects.filter(name__in=categories)
+
+        if 'q' in request.GET:
+            query = request.GET['q']
+            if not query:
+                messages.error(
+                    request, "You didn't enter any search criteria!")
+                return redirect(reverse('products'))
+
+            queries = Q(name__icontains=query) | Q(
+                description__icontains=query)
+            products = products.filter(queries)
+
     context = {
         'products': products,
+        'search_term': query,
+        'current_categories': categories,
     }
 
-    # It's going to return products/products.html which we'll build in a moment.
-    # And it will also need a context since we'll need to send some things back to the template.
     return render(request, 'products/products.html', context)
+
+
+def product_detail(request, product_id):
+    """ A view to show individual product details """
+
+    product = get_object_or_404(Product, pk=product_id)
+
+    context = {
+        'product': product,
+    }
+
+    return render(request, 'products/product_detail.html', context)

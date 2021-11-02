@@ -10,5 +10,8 @@ urlpatterns = [
     # But, any way to finish this file.
     # All we have to do is change the view from index to all_products.
     # And the name from 'home' to 'products'.
-    path('', views.all_products, name='products')
+    path('', views.all_products, name='products'),
+    # which will contain the product Id
+    # and that will return the product detail  view and be named product detail.
+    path('<product_id>', views.product_detail, name='product_detail'),
 ]
