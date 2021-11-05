@@ -10,8 +10,36 @@ def all_products(request):
     products = Product.objects.all()
     query = None
     categories = None
+    sort = None
+    direction = None
 
     if request.GET:
+        if 'sort' in request.GET:
+            sortkey = request.GET['sort']
+            sort = sortkey
+            if sortkey == 'name':
+                sortkey == 'lower_name'
+                products = products.annotate(lower_name=Lower('name'))
+
+            # In the sorting code block here I'll add a conditional 
+            # to check if the sort key is equal to category.
+            if sortkey == 'category':
+                # And if it is I want to adjust it to tack on a double underscore and name.
+                # Remember this double underscore syntax allows us to drill into a related model.
+                # And that works for ordering also. (see 5 lines below where you see)
+                # "products = products.order_by(sortkey)"
+                # So by doing this we're effectively changing this line to (see above line)
+                # products dot order by category double underscore name 
+                # "products = products.order_by(category__name)"
+                # And of course, if the line above it adds a minus in front of it. it'll just be reversed.
+                sortkey = 'category__name'
+
+            if 'direction' in request.GET:
+                direction = request.GET['direction']
+                if direction == 'desc':
+                    sortkey = f'-{sortkey}'
+            products = products.order_by(sortkey)
+
         if 'category' in request.GET:
             categories = request.GET['category'].split(',')
             products = products.filter(category__name__in=categories)
@@ -28,10 +56,13 @@ def all_products(request):
                 description__icontains=query)
             products = products.filter(queries)
 
+    current_sorting = f'{sort}_{direction}'
+
     context = {
         'products': products,
         'search_term': query,
         'current_categories': categories,
+        'current_sorting': current_sorting,
     }
 
     return render(request, 'products/products.html', context)

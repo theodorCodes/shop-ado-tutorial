@@ -22,6 +22,25 @@
   <div class="row">
     <div class="col text-center mt-3">
       <h2 class="logo-font">Products</h2>
+
+      <!-- 2) category tags under Products header -->
+      <!-- 
+      Just under the products header.
+      Let's iterate through that and render some category links.
+      I'll use some customized bootstrap badges.
+      Another built-in bootstrap element to do this.
+      For the most part this little code snippet is pretty straightforward.
+      Every single class here except for category-badge and text-black is built into bootstrap.
+      The href uses the same linking mechanism as the links in the individual
+      product cards. 
+      And again here we're using the categories friendly name as the text of the link.
+      -->
+      {% for c in current_categories %}
+      <a class="category-badge text-decoration-none" href="{% url 'products' %}?category={{ c.name }}">
+        <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">{{ c.friendly_name }}</span>
+      </a>
+      {% endfor %}
+
       <hr class="w-50 mb-1">
       </hr>
     </div>
@@ -29,7 +48,78 @@
   <!-- product container -->
   <div class="row">
     <div class="product-container col-10 offset-1">
-      <div class="row mt-1 mb-2"></div>
+
+      <!-- 3) category sorting -->
+      <!--
+      Now let's move into the empty row above the list of products.
+      This is where the sort options for the products page and our search result count we'll go.
+      Again in the interest of brevity, I'm gonna paste in this code from the completed project.
+      But we'll go through all the significant parts.
+      This may look like a lot but it's actually quite simple.
+      -->
+      <div class="row mt-1 mb-2">
+        <!--
+        First let's talk about the columns.
+        This layout will put the sort select box on top on mobile.
+        But using the order first and order last classes adjusts it so that the sort
+        select box will actually be the last column on medium and larger screens.
+        -->
+        <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+          <!--
+          Moving to the sort select box itself.
+          It's a pretty standard select box.
+          But in order to determine the selected value.
+          We're checking the value of the current sorting template variable.
+          That's the one we're returning from the view which will
+          have the value of none_none.
+          -->
+          <!--
+          If no sorting is currently selected.
+          The effect here is that if the value of the
+          current sorting variable from the view is for example price_ascending
+          Then this option will be selected in the select box.
+          -->
+          <div class="sort-select-wrapper w-50">
+            <select id="sort-selector"
+              class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
+              <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
+              <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
+              <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
+              <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
+              <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
+              <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+              <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+              <option value="category_asc" {% if current_sorting == 'category_asc' %}selected{% endif %}>Category (A-Z)</option>
+              <option value="category_desc" {% if current_sorting == 'category_desc' %}selected{% endif %}>Category (Z-A)</option>
+            </select>
+          </div>
+        </div>
+        <!-- 
+        Now to the last piece. The product count and search results.
+        This piece of code is broken into three main parts.
+        -->
+        <div class="col-12 col-md-6 order-md-first">
+          <p class="text-muted mt-3 text-center text-md-left">
+            <!--
+            In front of the product count I've added a link to go back to the main products page.
+            If the user has either entered a search term, selected some specific categories, or sorted in a specific way.
+            -->
+            {% if search_term or current_categories or current_sorting != 'None_None' %}
+            <span class="small"><a href="{% url 'products' %}">Products Home</a> | </span>
+            {% endif %}
+            <!--
+            We're using the length built-in template filter to count the number of products.
+            "products | length"
+            Then if there's a search term, again returned in the context from the all products view.
+            "if search_term"
+            We tack on a few extra words to let the user know what they've searched for.
+            foud for "search_term"
+            -->
+            {{ products|length }} Products{% if search_term %} found for <strong>"{{ search_term }}"</strong>{% endif %}
+          </p>
+        </div>
+
+      </div>
       <!-- product row -->
       <div class="row">
         <!-- Django product loop -->
@@ -52,6 +142,21 @@
               <div class="row">
                 <div class="col">
                   <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
+
+                  <!-- Show category after price -->
+                  <!-- 
+                  If the product has a category, we want to render it out 
+                  using its programmatic name as the href and its friendly name as the text.
+                  Let's add this to the product_detail.html page as well.
+                  -->
+                  {% if product.category %}
+                  <p class="small mt-1 mb-0">
+                    <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                      <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                    </a>
+                  </p>
+                  {% endif %}
+
                   {% if product.rating %}
                   <small class="text-muted">
                     <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
