@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',  # required by allauth
     'home',  # added for home template
     'products',  # added to integrate products app
+    'bag', # added to integrage shopping bag app
 ]
 
 MIDDLEWARE = [

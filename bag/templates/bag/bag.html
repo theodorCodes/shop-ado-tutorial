@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <!-- First, we need the overlay to cover-up the background image -->
+    <div class="overlay"></div>
+    <!-- 
+    Beneath that the layout will be similar to the products page, but it'll use a container instead of a container fluid.
+    Inside the container will be two rows, each with a single column.
+    -->
+    <div class="container mb-2">
+        <!--
+        The first row contains the shopping bag heading, between a couple of horizontal rules.
+        -->
+        <div class="row">
+            <div class="col">
+                <hr>
+                <h2 class="logo-font mb-4">Shopping Bag</h2>
+                <hr>
+            </div>
+        </div>
+
+        <!--
+        And the second column will contain a table to show the bag contents.
+        -->
+        <div class="row">
+            <div class="col">
+                <!--
+                in this column, I'm gonna add an if statement
+                because I only want to render the table if there's something
+                in the shopping bag.
+                This variable, "bag_items" will be created in the next step.
+                But we can use it now to handle the logic for an empty shopping bag.
+                -->
+                {% if bag_items %}
+                    <!-- If there are items in the bag, I'll render this table -->
+                    <div class="table-responsive rounded"></div>
+                {% else %}
+                    <!-- 
+                    And if not let's just render a paragraph that says your bag is empty
+                    and give users a link back to the products page.
+                    -->
+                    <p class="lead mb-5">Your bag is empty.</p>
+                    <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                        <span class="icon">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="text-uppercase">Keep Shopping</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
