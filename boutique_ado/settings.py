@@ -73,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',  # required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'bag.contexts.bag_contents',  # HERE
             ],
         },
     },
@@ -164,3 +165,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# While I'm here in settings.py I'm also going to add two new variables
+# which will be used to calculate delivery costs FREE_DELIVERY_THRESHOLD
+# and STANDARD_DELIVERY_PERCENTAGE at the very end of this file
+# I'll explain these in just a moment
+FREE_DELIVERY_THRESHOLD = 50
+STANDARD_DELIVERY_PERCENTAGE = 10 
