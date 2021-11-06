@@ -10,7 +10,6 @@
 {% endblock %}
 
 {% block content %}
-
   <div class="overlay"></div>
   <div class="container mb-2">
     <div class="row">
@@ -24,28 +23,120 @@
     <div class="row">
       <div class="col">
         {% if bag_items %}
-          <div class="table-responsive rounded">
-            <!--
-            For now, I'll render it here in this div and we'll complete this part in a bit.
-            -->
-            {{ bag_items }}
-            <!--
-            But, for now, this will at least prove that it's working.
-            Now I'll start the server.
-            Add a few products to the bag.
-            And then navigate to the shopping bag page.
-            Already we can see a significant change in our shopping bag.
-            -->
-          </div>
-        {% else %}
+        <div class="table-responsive rounded">
+          <!--
+          the basic idea is that we're gonna have **five columns** containing the product image,
+          some info about it, the per-item price the quantity, and the subtotal for that item
+          and each row will be a new item.
+          -->
+          <!--
+          So let's make a table with a header row here.
+          -->
+          <table class="table table-sm table-borderless">
+            <thead class="text-black">
+              <tr>
+                <!-- five columns -->
+                <!--
+                The second header is blank since the product info will span two columns.
+                And the other three will contain the price the quantity and the subtotal.
+                -->
+                <th scope="col">Product Info</th>
+                <th scope="col"></th>
+                <th scope="col">Price</th>
+                <th scope="col">Qty</th>
+                <th scope="col">Subtotal</th>
+              </tr>
+            </thead>
 
-          <p class="lead mb-5">Your bag is empty.</p>
-          <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
-            <span class="icon">
-              <i class="fas fa-chevron-left"></i>
-            </span>
-            <span class="text-uppercase">Keep Shopping</span>
-          </a>
+            <!--
+            Inside the table body, let's iterate through each item in the shopping bag.
+            And create a row for each one.
+            -->
+            {% for item in bag_items %}
+            <tr>
+              <!-- And create a row for each one. -->
+              <td class="p-3 w-25">
+                <!-- The first column will be the product image. -->
+                <img class="img-fluid rounded" src="{{ item.product.image.url }}">
+              </td>
+              <td class="py-3">
+                <!-- And the second will contain the products name and SKU -->
+                <p class="my-0"><strong>{{ item.product.name }}</strong></p>
+                <p class="my-0 small text-muted">SKU: {{ item.product.sku|upper }}</p>
+              </td>
+              <td class="py-3">
+                <!-- The third column here will have the price. -->
+                <p class="my-0">${{ item.product.price }}</p>
+              </td>
+              <td class="py-3 w-25">
+                <!-- The fourth the quantity. -->
+                <p class="my-0">{{ item.quantity }}</p>
+              </td>
+              <td class="py-3">
+                <!-- 
+                And the fifth will contain the subtotal. 
+                Which for now we'll just set as the product price even though it won't be accurate.
+                We'll fix this in a later step.
+                -->
+                <p class="my-0">${{ item.product.price }}</p>
+              </td>
+            </tr>
+            {% endfor %}
+            <!--
+            Finally, I'll paste in the final two rows from the completed project.
+            And you'll see some familiar variables.
+            -->
+            <tr>
+              <td colspan="5" class="pt-5 text-right">
+                <!-- In this first row, I'm using the total -->
+                <h6><strong>Bag Total: ${{ total|floatformat:2 }}</strong></h6>
+                <!-- and the delivery charges -->
+                <h6>Delivery: ${{ delivery|floatformat:2 }}</h6>
+                <!-- and the grand_total  -->
+                <h4 class="mt-4"><strong>Grand Total: ${{ grand_total|floatformat:2 }}</strong></h4>
+                <!-- as well as the free delivery_delta. -->
+                {% if free_delivery_delta > 0 %}
+                <!-- 
+                To show the user a summary of their costs and entice them to spend a little more
+                if they're under the free delivery threshold.
+                -->
+                <p class="mb-1 text-danger">
+                  You could get free delivery by spending just <strong>${{ free_delivery_delta }}</strong>
+                  more!
+                </p>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="5" class="text-right">
+                <!-- In the final row we'll render a keep shopping button in case they're not done. -->
+                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+                  <span class="icon">
+                    <i class="fas fa-chevron-left"></i>
+                  </span>
+                  <span class="text-uppercase">Keep Shopping</span>
+                </a>
+                <!-- 
+                And a secure checkout button which will take them to the checkout page once it's created.
+                -->
+                <a href="" class="btn btn-black rounded-0 btn-lg">
+                  <span class="text-uppercase">Secure Checkout</span>
+                  <span class="icon">
+                    <i class="fas fa-lock"></i>
+                  </span>
+                </a>
+              </td>
+            </tr>
+          </table>
+        </div>
+        {% else %}
+        <p class="lead mb-5">Your bag is empty.</p>
+        <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 btn-lg">
+          <span class="icon">
+            <i class="fas fa-chevron-left"></i>
+          </span>
+          <span class="text-uppercase">Keep Shopping</span>
+        </a>
         {% endif %}
       </div>
     </div>
