@@ -2,117 +2,110 @@
 {% load static %}
 
 {% block page_header %}
-<div class="container header-container">
-  <div class="row">
-    <div class="col"></div>
-  </div>
-</div>
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
 {% endblock %}
 
 {% block content %}
-<!--
-The overlay and  container fluid will remain the same but 
-in this template, we'll only need one row. 
--->
-<div class="overlay"></div>
-<div class="container-fluid">
-  <div class="row">
-    <!--
-    It'll be split into two columns and I'm 
-    going to offset the first by two in  order to push it toward the middle of 
-    the screen. 
-    -->
-    <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-      <!--
-      The first column  will contain the product image. 
-      So let's copy that from the products template. 
-      -->
-      <div class="image-container my-5">
-        <!--
-        And update it slightly. 
-        -->
-        {% if product.image %}
-        <!--
-        The only difference here is  
-        that on the products page the image will  link to the product details but here it 
-        will link to the actual image in a new window. 
-        -->
-        <a href="{{ product.image.url }}" target="_blank">
-          <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-        </a>
-        {% else %}
-        <a href="">
-          <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-        </a>
-        {% endif %}
-      </div>
+    <div class="overlay"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+                <div class="image-container my-5">
+                    {% if product.image %}
+                        <a href="{{ product.image.url }}" target="_blank">
+                            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </a>
+                        {% else %}
+                        <a href="">
+                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="product-details-container mb-5 mt-md-5">
+                    <p class="mb-0">{{ product.name }}</p>
+                    <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
+                    {% if product.category %}
+                    <p class="small mt-1 mb-0">
+                        <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
+                            <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                        </a>
+                    </p>
+                    {% endif %}
+                    {% if product.rating %}
+                        <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+                    {% else %}
+                        <small class="text-muted">No Rating</small>
+                    {% endif %}
+                    <p class="mt-3">{{ product.description }}</p>
+                    <form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-row">
+                            
+                            <!-- 
+                            I'll use a with statement. To assign product.has_sizes to a variable s.
+                            So we can reuse it in one other spot.
+                            -->
+                            {% with product.has_sizes as s %}
+                            <!--
+                            Now only if the product has sizes, inside this form row just above the quantity input.
+                            I'll add another column and paste in the select box.
+                            -->
+                            {% if s %}
+                                <!--
+                                It's straightforward and uses regular old string values as options.
+                                With medium selected by default.
+                                And has a name of product size which we'll use in the next video.
+                                -->
+                                <div class="col-12">
+                                    <p><strong>Size:</strong></p>
+                                    <select class="form-control rounded-0 w-50" name="product_size" id='id_product_size'>
+                                        <option value="xs">XS</option>
+                                        <option value="s">S</option>
+                                        <option value="m" selected>M</option>
+                                        <option value="l">L</option>
+                                        <option value="xl">XL</option>
+                                    </select>
+                                </div>
+                            {% endif %}
+                            <div class="col-12">
+                                <p class="mt-3"><strong>Quantity:</strong></p>
+                                <div class="form-group w-50">
+                                    <div class="input-group">
+                                        <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--
+                            I'll reuse the s variable in this last column in order to make it full width and have
+                            a little top margin only if the product has sizes.
+                            This is just an aesthetic thing to make it look a bit cleaner by evening up the
+                            margins and spacing.
+                            From: <div class="col-12">
+                            To: <div class="col{% if s %}-12 mt-2{% endif %}">
+                            -->
+                            <div class="col{% if s %}-12 mt-2{% endif %}">
+                                <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-5">
+                                    <span class="icon">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="text-uppercase">Keep Shopping</span>
+                                </a>
+                                <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
+                            </div>
+                            <input type="hidden" name="redirect_url" value="{{ request.path }}">
+                            <!-- then endwith here -->
+                            {% endwith %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
-    <!--
-    The second column will contain 
-    all the products details as well as  eventually the buttons to select the 
-    size and quantity and add it to the  shopping bag.
-    -->
-    <div class="col-12 col-md-6 col-lg-4">
-      <!--
-      We'll do that stuff later 
-      but right now we can take care of the  product details in the interest of time 
-      I'll paste that in from the completed  project.
-      -->
-      <div class="product-details-container mb-5 mt-md-5">
-        <!-- We need the product name, -->
-        <p class="mb-0">{{ product.name }}</p>
-        <!-- the price, -->
-        <p class="lead mb-0 text-left font-weight-bold">${{ product.price }}</p>
-
-        <!-- Show category after price -->
-        <!--
-        If the product has a category, we want to render it out 
-        using its programmatic name as the href and its friendly name as the text.
-        -->
-        {% if product.category %}
-        <p class="small mt-1 mb-0">
-          <a class="text-muted" href="{% url 'products' %}?category={{ product.category.name }}">
-            <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
-          </a>
-        </p>
-        {% endif %}
-
-        <!-- the rating if it  exists and its description. -->
-        {% if product.rating %}
-        <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-        {% else %}
-        <small class="text-muted">No Rating</small>
-        {% endif %}
-        <p class="mt-3">{{ product.description }}</p>
-
-        <!-- product description form -->
-        <form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
-          {% csrf_token %}
-          <div class="form-row">
-              <div class="col-12">
-                  <p class="mt-3"><strong>Quantity:</strong></p>
-                  <div class="form-group w-50">
-                      <div class="input-group">
-                          <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
-                      </div>
-                  </div>
-              </div>
-
-              <div class="col-12">
-                  <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0 mt-5">
-                      <span class="icon">
-                          <i class="fas fa-chevron-left"></i>
-                      </span>
-                      <span class="text-uppercase">Keep Shopping</span>
-                  </a>
-                  <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
-              </div>
-              <input type="hidden" name="redirect_url" value="{{ request.path }}">
-          </div>
-      </form>
-
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock %}
