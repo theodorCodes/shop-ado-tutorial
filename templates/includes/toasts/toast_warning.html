@@ -1,0 +1,20 @@
+<!-- data-autohide="false" preventing auto-hiding -->
+<div class="toast custom-toast rounded-0 border-top-0" data-autohide="false">
+  <!-- class name: arrow-warning -->
+  <div class="arrow-up arrow-warning"></div>
+  <div class="w-100 toast-capper bg-warning"></div>
+  <!-- header -->
+  <div class="toast-header bg-white text-dark">
+      <!-- toast heading on the left -->
+      <strong class="mr-auto">Warning!</strong>
+      <!-- close button on the right of heading with data-dismiss to prevenet auto-hide -->
+      <button type="button" class="ml-2 mb-1 close text-dark" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+  <!-- body -->
+  <div class="toast-body bg-white">
+      <!-- message template -->
+      {{ message }}        
+  </div>
+</div>

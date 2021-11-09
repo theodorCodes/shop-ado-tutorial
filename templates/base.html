@@ -157,7 +157,22 @@
   </header>
 
   {% if messages %}
-  <div class="message-container"></div>
+    <div class="message-container">
+        {% for message in messages %}
+            <!-- Using a simple with statement. We can check the level of the message. -->
+            {% with message.level as level %}
+                {% if level == 40 %}
+                    {% include 'includes/toasts/toast_error.html' %}
+                {% elif level == 30 %}
+                    {% include 'includes/toasts/toast_warning.html' %}
+                {% elif level == 25 %}
+                    {% include 'includes/toasts/toast_success.html' %}
+                {% else %}
+                    {% include 'includes/toasts/toast_info.html' %}
+                {% endif %}
+            {% endwith %}
+        {% endfor %}
+    </div>
   {% endif %}
 
   <!-- custom header -->
@@ -170,6 +185,9 @@
 
   <!-- custom js -->
   {% block postloadjs %}
+    <script type="text/javascript">
+      $('.toast').toast('show');
+    </script>
   {% endblock %}
 
 </body>
