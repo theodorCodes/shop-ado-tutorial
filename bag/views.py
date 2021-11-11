@@ -126,7 +126,7 @@ def adjust_bag(request, item_id):
 
 
 # Remove bag item
-# change name to remove_from_bag()
+# change name to remove_from_bag
 def remove_from_bag(request, item_id):
     """ Remove the item from the shopping bag """
 
@@ -167,7 +167,7 @@ def remove_from_bag(request, item_id):
 
         request.session['bag'] = bag
         # Finally instead of returning a redirect.
-        ## return redirect(reverse('view_bag'))
+        ## return redirect reverse 'view_bag'
         # Because this view will be posted to from a JavaScript function.
         # We want to return an actual 200 HTTP response.
         # Implying that the item was successfully removed.
