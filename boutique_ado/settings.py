@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 
+# Access Stripe environment settings with os and dotenv
+# import os and
+from dotenv import load_dotenv, find_dotenv
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -183,5 +188,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # which will be used to calculate delivery costs FREE_DELIVERY_THRESHOLD
 # and STANDARD_DELIVERY_PERCENTAGE at the very end of this file
 # I'll explain these in just a moment
+# then added Stripe information
+# Stripe
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10 
+STRIPE_CURRENCY = 'usd'
+# dotenv requires to load and find environment file on your system first
+load_dotenv(find_dotenv())
+# before you can load below env info
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
