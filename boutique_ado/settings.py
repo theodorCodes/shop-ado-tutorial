@@ -198,3 +198,5 @@ load_dotenv(find_dotenv())
 # before you can load below env info
 STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', '')
+# Stripe webhooks
+STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
