@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'products',  # added to integrate products app
     'bag', # added to integrage shopping bag app
     'checkout',
+    'profiles',
 
     # Others
     'crispy_forms',
