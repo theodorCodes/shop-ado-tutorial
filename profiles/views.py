@@ -22,9 +22,11 @@ def profile(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Profile updated successfully')
-
-    # Populate form variable with user's current profile information
-    form = UserProfileForm(instance=profile)
+        else:
+            messages.error(request, 'Update failed. Please ensure the form is valid.')
+    else:
+        # Populate form variable with user's current profile information
+        form = UserProfileForm(instance=profile)
     # Return the profile with the order, 
     # instead of adding user profile to context
     orders = profile.orders.all()
