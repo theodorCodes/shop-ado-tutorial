@@ -15,6 +15,8 @@ urlpatterns = [
     # and that will return the product detail  view and be named product detail.
     # Added int: and trailing slash / to wrap 'product_id'
     path('<int:product_id>/', views.product_detail, name='product_detail'),
-    # product form
+    # Add product page
     path('add/', views.add_product, name='add_product'),
+    # Edit product page
+    path('edit/<int:product_id>/', views.edit_product, name='edit_product'),
 ]
