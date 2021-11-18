@@ -13,5 +13,8 @@ urlpatterns = [
     path('', views.all_products, name='products'),
     # which will contain the product Id
     # and that will return the product detail  view and be named product detail.
-    path('<product_id>', views.product_detail, name='product_detail'),
+    # Added int: and trailing slash / to wrap 'product_id'
+    path('<int:product_id>/', views.product_detail, name='product_detail'),
+    # product form
+    path('add/', views.add_product, name='add_product'),
 ]
