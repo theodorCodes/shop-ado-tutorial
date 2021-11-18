@@ -6,7 +6,8 @@ from django.contrib import messages
 from .models import UserProfile
 # Import the form function from forms.py
 from .forms import UserProfileForm
-
+# Import order from checkout to get order_number
+from checkout.models import Order
 
 # Create your views here.
 
@@ -38,3 +39,22 @@ def profile(request):
     }
 
     return render(request, template, context)
+
+
+# for order history in profile.html
+def order_history(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number)
+
+    messages.info(request, (
+        f'This is a post confirmation for order number { order_number }.'
+        'A confirmation email was sent on the order date.'
+    ))
+
+    template = 'checkout/checkout_success.html'
+    context = {
+        'order': order,
+        'from_profile': True,
+    }
+
+    return render(request, template, context)
+    
