@@ -1,7 +1,8 @@
 # Get the profile in get_object_or_404
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
-
+# Check access with login decorator
+from django.contrib.auth.decorators import login_required
 # Import the user profile model
 from .models import UserProfile
 # Import the form function from forms.py
@@ -12,6 +13,7 @@ from checkout.models import Order
 # Create your views here.
 
 
+@login_required
 def profile(request):
     """ Display the user's profile. """
     # Return the profile to the template
