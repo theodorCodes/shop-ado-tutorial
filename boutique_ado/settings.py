@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-!tso84risnw0d(h*v)ep#4yq$^0@xiat&@5f5pud@$o7v%qds)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.1.3']
+ALLOWED_HOSTS = ['ci-django-boutique-ado.herokuapp.com', '127.0.0.1', 'localhost', '192.168.1.3']
 
 
 # Application definition
@@ -151,8 +151,13 @@ WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 #     }
 # }
 
-# Postgres - use this for Postgres database
-DATABASES = {
+# Use Heroku db if db url is available, else use local Postgres db
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'boutique_ado',
